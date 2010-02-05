@@ -1,0 +1,363 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>wicket-gae</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>Wicket and Guice for Google App Engine</name>
+    <description>
+        This project is a template for building Wicket-based web applications that run on
+        Google App Engine, using Google Guice for dependency injection.
+    </description>
+
+    <properties>
+        <wicket.version>1.4.5</wicket.version>
+        <gae.version>1.3.0</gae.version>
+        <!--
+            Specify AppEngine version for your project. It should match
+            SDK version pointed to by ${gae.home} property (Typically,
+            one used by your Eclipse plug-in)
+        -->
+        <!--<gae.home>C:\Users\Steven\DevTools\appengine-java-sdk-1.3.0</gae.home>-->
+    </properties>
+
+    <dependencies>
+
+        <!-- Servlet -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--  Wicket -->
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-guice</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <!-- Logging -->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+
+        <!-- Guice -->
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.7.2</version>
+        </dependency
+        -->
+
+        <!-- Google App Engine -->
+
+        <!--
+            jars from GAE's "lib/user" must be added as compile-time
+            dependencies, as described here in "Copying JARs" section:
+            http://code.google.com/appengine/docs/Messages/tools/ant.html
+        -->
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+            <version>${gae.version}</version>
+        </dependency>
+
+        <!--
+            GAE libraries for local testing as described here:
+            http://code.google.com/appengine/docs/Messages/howto/unittesting.html
+        -->
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-labs</artifactId>
+            <version>${gae.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-stubs</artifactId>
+            <version>${gae.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-local-runtime</artifactId>
+            <version>${gae.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JDO -->
+
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo2-api</artifactId>
+            <version>2.3-eb</version>
+            <exclusions>
+                <!--
+                    exclude the legacy javax.transaction:transaction-api
+                    and replace it with javax.transaction:jta (it
+                    appears to be the same thing)
+                -->
+                <exclusion>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>transaction-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine.orm</groupId>
+            <artifactId>datanucleus-appengine</artifactId>
+            <version>1.0.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+            <version>1.1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>transaction-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>datanucleus-jpa</artifactId>
+            <version>1.1.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>geronimo-jpa_3.0_spec</artifactId>
+            <version>1.1.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--  TestNG -->
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>5.8</version>
+            <classifier>jdk15</classifier>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <!--
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        -->
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- This copies the Wicket html files which are stored in the java path.-->
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <!--<optimize>true</optimize>-->
+                    <debug>true</debug>
+                </configuration>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<phase>compile</phase>-->
+                <!--<goals>-->
+                <!--<goal>compile</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
+            </plugin>
+            <!--
+                This plug-in "enhances" your domain model objects (i.e. makes them persistent for datanucleus)
+            -->
+            <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>maven-datanucleus-plugin</artifactId>
+                <version>1.1.4</version>
+                <configuration>
+                    <!-- This path should contain the JDO @PersistenceCapable classes. -->
+                    <mappingIncludes>**/model/*.class</mappingIncludes>
+                    <verbose>true</verbose>
+                    <enhancerName>ASM</enhancerName>
+                    <api>JDO</api>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-core</artifactId>
+                        <version>1.1.5</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>javax.transaction</groupId>
+                                <artifactId>transaction-api</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-rdbms</artifactId>
+                        <version>1.1.5</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-enhancer</artifactId>
+                        <version>1.1.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <useFile>false</useFile>
+                </configuration>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.13.1</version>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- We go to mvnsearch.org after latest GAE SDK artifacts -->
+        <!--<repository>-->
+        <!--<id>mvnsearch.org</id>-->
+        <!--<name>MVN Search</name>-->
+        <!--<url>-->
+        <!--http://www.mvnsearch.org/maven2-->
+        <!--</url>-->
+        <!--<releases>-->
+        <!--<enabled>true</enabled>-->
+        <!--<updatePolicy>never</updatePolicy>-->
+        <!--<checksumPolicy>warn</checksumPolicy>-->
+        <!--</releases>-->
+        <!--<snapshots>-->
+        <!--<enabled>false</enabled>-->
+        <!--</snapshots>-->
+        <!--</repository>-->
+        <repository>
+            <id>jboss</id>
+            <name>JBoss Repository</name>
+            <url>http://repository.jboss.com/maven2/</url>
+        </repository>
+        <repository>
+            <id>DataNucleus_Repos2</id>
+            <name>DataNucleus Repository</name>
+            <url>http://www.datanucleus.org/downloads/maven2</url>
+        </repository>
+        <repository>
+            <id>maven-gae-plugin-repo</id>
+            <name>maven-gae-plugin repository</name>
+            <url>http://maven-gae-plugin.googlecode.com/svn/repository</url>
+        </repository>
+
+    </repositories>
+</project>
