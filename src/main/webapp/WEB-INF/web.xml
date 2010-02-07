@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
@@ -36,6 +36,10 @@
             <param-name>applicationClassName</param-name>
             <param-value>com.example.SampleApplication</param-value>
         </init-param>
+        <init-param>
+            <param-name>ignorePaths</param-name>
+            <param-value>/_ah/*</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
@@ -56,6 +60,6 @@
     <context-param>
         <param-name>configuration</param-name>
         <param-value>deployment</param-value>
-    </context-param>    
+    </context-param>
 
 </web-app>

@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en"
+      lang="en">
+<head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
+</head>
+
+<body>
+
+<div wicket:id="hello-user">
+    Hello, <span wicket:id="user-nickname">user nickname</span>! (You can <a wicket:id="sign-out" href="#">sign out</a>.)
+</div>
+
+<div wicket:id="hello-anon">
+    Hello! <a wicket:id="sign-in" href="#">Sign in</a> to include your name with greetings you post.
+</div>
+
+<div wicket:id="no-messages">The guestbook has no messages.</div>
+
+<div wicket:id="messages">
+    <p wicket:id="message">Somebody wrote:</p>
+    <blockquote wicket:id="message-content">some content</blockquote>
+</div>
+
+<form wicket:id="sign-form">
+    <div><textarea wicket:id="sign-content" rows="3" cols="60"></textarea></div>
+    <div><input type="submit" value="Post Greeting"/></div>
+</form>
+
+</body>
+</html>

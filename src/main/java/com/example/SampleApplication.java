@@ -1,8 +1,5 @@
 package com.example;
 
-import com.example.jdo.PersistenceManagerFilter;
-import com.example.service.MessageRepository;
-import com.google.inject.AbstractModule;
 import com.google.inject.servlet.ServletModule;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.protocol.http.HttpSessionStore;
@@ -24,9 +21,9 @@ public class SampleApplication extends WebApplication
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
-    public Class<HomePage> getHomePage()
+    public Class<Guestbook> getHomePage()
     {
-        return HomePage.class;
+        return Guestbook.class;
     }
 
     @Override
@@ -37,9 +34,12 @@ public class SampleApplication extends WebApplication
         // for Google App Engine
         getResourceSettings().setResourcePollFrequency(null);
 
-        // Yay, Guice!
-        addComponentInstantiationListener(new GuiceComponentInjector(this, getServletModule()/*,
-                                                                     new ApplicationModule()*/));
+        // Enable Guice for field injection on Wicket pages.  Unfortunately, constructor injection into
+        // pages is not supported.  Supplying ServletModule is optional; it enables usage of @RequestScoped and
+        // @SessionScoped, which may not be useful for Wicket applications because the WebPage instances are
+        // already stored in session, with their dependencies injected once per session.
+        addComponentInstantiationListener(new GuiceComponentInjector(this, new GuiceModule()));
+//        addComponentInstantiationListener(new GuiceComponentInjector(this, new ServletModule(), new GuiceModule()));
     }
 
     @Override
@@ -48,41 +48,4 @@ public class SampleApplication extends WebApplication
         // for Google App Engine
         return new HttpSessionStore(this);
     }
-
-    private ServletModule getServletModule()
-    {
-        // Use of a ServletModule provides @RequestScoped and @SessionScoped injection.
-        // http://code.google.com/p/google-guice/wiki/ServletModule
-        return new ServletModule()
-        {
-            @Override
-            protected void configureServlets()
-            {
-                // This doesn't work; Guice complains about not being a singleton even if @Singleton is applied.
-//                filter("/*").through(PersistenceManagerFilter.class);
-
-                // Wicket goes right to the web.xml file, so these don't work.
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("applicationClassName", com.example.SampleApplication.class.getName());
-//                filter("/*").through(org.apache.wicket.protocol.http.WicketFilter.class, params);
-
-                // Enable per-request thread PersistenceManager injection.
-                PersistenceManagerFilter.bindPersistenceManager(binder());
-
-                // business object bindings go here
-                bind(Messages.class).to(MessageRepository.class);
-
-            }
-        };
-    }
-
-//    private static class ApplicationModule extends AbstractModule
-//    {
-//        @Override
-//        protected void configure()
-//        {
-//            // business object bindings go here
-//            bind(Messages.class).to(MessageRepository.class);
-//        }
-//    }
 }
