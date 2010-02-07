@@ -1,6 +1,6 @@
 package com.example.jdo;
 
-import com.google.inject.Binder;
+import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 
 import javax.jdo.JDOHelper;
@@ -40,21 +40,21 @@ public class PersistenceManagerFilter implements Filter
     }
 
     /**
-     * Binds the JDO {@link javax.jdo.PersistenceManager} interface to the provider that allows the implementation
-     * to be injected. This should be called once from within a Guice module configuration method such as
-     * {@link com.google.inject.Module#configure(com.google.inject.Binder)} or
-     * {@link com.google.inject.servlet.ServletModule#configureServlets()}.
-     *
-     * @param binder the Guice {@link com.google.inject.Binder} to use
+     * This module binds the JDO {@link javax.jdo.PersistenceManager} interface to the provider that allows the
+     * implementation to be injected as Provider&lt;PersistenceManager&gt;.
      */
-    public static void bindPersistenceManager(Binder binder)
+    public static class GuiceModule extends AbstractModule
     {
-        binder.bind(PersistenceManager.class).toProvider(new Provider<PersistenceManager>()
+        @Override
+        protected void configure()
         {
-            public PersistenceManager get()
+            bind(PersistenceManager.class).toProvider(new Provider<PersistenceManager>()
             {
-                return PersistenceManagerFilter.pm.get();
-            }
-        });
+                public PersistenceManager get()
+                {
+                    return PersistenceManagerFilter.pm.get();
+                }
+            });
+        }
     }
 }
