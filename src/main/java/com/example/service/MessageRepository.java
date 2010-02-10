@@ -1,16 +1,16 @@
 package com.example.service;
 
-import com.example.Messages;
 import com.example.model.Message;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import javax.jdo.PersistenceManager;
 
-public class MessageRepository extends BaseRepository<Message> implements Messages
+public class MessageRepository extends JdoRepository<Message>
 {
     @Inject
-    public MessageRepository(PersistenceManager pm)
+    public MessageRepository(Provider<PersistenceManager> pmProvider)
     {
-        super(Message.class, pm);
+        super(Message.class, pmProvider);
     }
 }

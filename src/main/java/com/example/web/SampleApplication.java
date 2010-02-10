@@ -1,6 +1,5 @@
-package com.example;
+package com.example.web;
 
-import com.google.inject.servlet.ServletModule;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.protocol.http.HttpSessionStore;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -11,16 +10,6 @@ import org.apache.wicket.session.ISessionStore;
  */
 public class SampleApplication extends WebApplication
 {
-    /**
-     * Constructor
-     */
-    public SampleApplication()
-    {
-    }
-
-    /**
-     * @see org.apache.wicket.Application#getHomePage()
-     */
     public Class<Guestbook> getHomePage()
     {
         return Guestbook.class;

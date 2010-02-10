@@ -1,5 +1,6 @@
-package com.example;
+package com.example.web;
 
+import com.example.Repository;
 import com.example.model.Message;
 import com.google.inject.Inject;
 import org.apache.wicket.PageParameters;
@@ -18,7 +19,7 @@ import java.util.List;
 public class HomePage extends WebPage
 {
     @Inject
-    private Messages messageRepo;
+    private Repository<Message> messageRepo;
 
     /**
      * Constructor that is invoked when page is invoked without a session.
@@ -32,7 +33,7 @@ public class HomePage extends WebPage
         Message message = new Message();
         message.setText(msg);
         message.setDate(new Date());
-        messageRepo.create(message);
+        messageRepo.persist(message);
 
         List<Message> messages = new ArrayList<Message>(messageRepo.list());
         add(new ListView<Message>("messages", messages)

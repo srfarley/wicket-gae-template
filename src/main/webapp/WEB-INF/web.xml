@@ -34,7 +34,7 @@
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>com.example.SampleApplication</param-value>
+            <param-value>com.example.web.SampleApplication</param-value>
         </init-param>
         <init-param>
             <param-name>ignorePaths</param-name>

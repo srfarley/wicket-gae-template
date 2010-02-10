@@ -3,10 +3,7 @@ package com.example;
 import com.google.appengine.api.datastore.dev.LocalDatastoreService;
 import com.google.appengine.tools.development.ApiProxyLocalImpl;
 import com.google.apphosting.api.ApiProxy;
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.util.tester.WicketTester;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -14,120 +11,17 @@ import org.testng.annotations.BeforeMethod;
 
 import javax.servlet.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
+/**
+ * This base test class sets up a simulated Google App Engine + Wicket environment.  Wicket pages
+ * can be tested using the protected 'tester' field, and development-mode GAE services are made
+ * available to tests.
+ */
 public abstract class BaseTestCase
 {
     protected FilteringWicketTester tester;
-
-    public static class FilteringWicketTester extends WicketTester
-    {
-        private List<Filter> servletFilters;
-
-        public FilteringWicketTester(WebApplication application, Filter... servletFilters)
-        {
-            super(application);
-            this.servletFilters = Arrays.asList(servletFilters);
-            initFilters();
-        }
-
-        @Override
-        public <C extends Page> void processRequestCycle(final Class<C> pageClass, final PageParameters params)
-        {
-            try
-            {
-                doFilter(servletFilters.iterator(), new Runnable()
-                {
-                    public void run()
-                    {
-                        FilteringWicketTester.super.processRequestCycle(pageClass, params);
-                    }
-                });
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-            catch (ServletException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private void doFilter(final Iterator<Filter> filterIterator,
-                              final Runnable processRequestCycle) throws ServletException, IOException
-        {
-            if (filterIterator.hasNext())
-            {
-                Filter filter = filterIterator.next();
-                filter.doFilter(getServletRequest(), getServletResponse(), new FilterChain()
-                {
-                    public void doFilter(ServletRequest request, ServletResponse response)
-                            throws IOException, ServletException
-                    {
-                        FilteringWicketTester.this.doFilter(filterIterator, processRequestCycle);
-                    }
-                });
-            }
-            else
-            {
-                processRequestCycle.run();
-            }
-        }
-
-        @Override
-        public void destroy()
-        {
-            for (Filter filter : servletFilters)
-            {
-                filter.destroy();
-            }
-
-            // This insures that this instance cannot be reused.
-            servletFilters = null;
-
-            super.destroy();
-        }
-
-        private void initFilters()
-        {
-            try
-            {
-                for (int i = 0; i < servletFilters.size(); i++)
-                {
-                    final int ii = i + 1;
-                    Filter filter = servletFilters.get(i);
-                    filter.init(new FilterConfig()
-                    {
-                        public String getFilterName()
-                        {
-                            return "filter-" + ii;
-                        }
-
-                        public ServletContext getServletContext()
-                        {
-                            return getServletSession().getServletContext();
-                        }
-
-                        public String getInitParameter(String name)
-                        {
-                            return null;
-                        }
-
-                        public Enumeration getInitParameterNames()
-                        {
-                            return null;
-                        }
-                    });
-                }
-            }
-            catch (ServletException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+    private String userEmail;
 
     @BeforeClass
     public void setUpFilteringWicketTesterOnce()
@@ -152,6 +46,8 @@ public abstract class BaseTestCase
 
         // JDO
         proxy.setProperty(LocalDatastoreService.NO_STORAGE_PROPERTY, Boolean.TRUE.toString());
+
+        userEmail = null;
     }
 
     @AfterMethod
@@ -179,6 +75,11 @@ public abstract class BaseTestCase
         return new Filter[0];
     }
 
+    protected final void setUserEmail(String userEmail)
+    {
+        userEmail = userEmail;
+    }
+
     /**
      * The subclass must return a new WebApplication subclass representing the Wicket application being tested.
      *
@@ -186,7 +87,7 @@ public abstract class BaseTestCase
      */
     protected abstract WebApplication createWebApplication();
 
-    private static class AppEngineEnvironment implements ApiProxy.Environment
+    private class AppEngineEnvironment implements ApiProxy.Environment
     {
         public String getAppId()
         {
@@ -200,12 +101,12 @@ public abstract class BaseTestCase
 
         public String getEmail()
         {
-            throw new UnsupportedOperationException();
+            return userEmail;
         }
 
         public boolean isLoggedIn()
         {
-            throw new UnsupportedOperationException();
+            return getEmail() != null;
         }
 
         public boolean isAdmin()
