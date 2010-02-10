@@ -1,11 +1,11 @@
-package com.example;
+package com.example.web;
 
+import com.example.Greetings;
 import com.example.model.Greeting;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -14,24 +14,16 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
-import javax.jdo.PersistenceManager;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Guestbook extends WebPage
 {
-    private Provider<PersistenceManager> pm;
-
-    private ListView<Greeting> messages;
-
     @Inject
-    public void setPersistenceManager(Provider<PersistenceManager> pm)
-    {
-        this.pm = pm;
-    }
+    private Greetings greetings;
 
     public Guestbook()
     {
@@ -66,13 +58,24 @@ public class Guestbook extends WebPage
             helloUser.setVisible(false);
         }
 
-        List<Greeting> greetings = listGreetings();
-        if (!greetings.isEmpty())
+        // This LoadableDetachableModel allows the following ListView<Greeting> to always load the latest persisted
+        // Greeting entities on-demand, without having to store any model data in the session when this Guestbook page
+        // gets serialized.
+        LoadableDetachableModel<List<Greeting>> latestGreetings = new LoadableDetachableModel<List<Greeting>>()
+        {
+            @Override
+            protected List<Greeting> load()
+            {
+                return greetings.listRecentGreetings();
+            }
+        };
+
+        if (!latestGreetings.getObject().isEmpty())
         {
             noMessages.setVisible(false);
         }
 
-        messages = new ListView<Greeting>("messages", greetings)
+        ListView<Greeting> messages = new ListView<Greeting>("messages", latestGreetings)
         {
             @Override
             protected void populateItem(ListItem<Greeting> item)
@@ -88,11 +91,10 @@ public class Guestbook extends WebPage
 
         Form<String> signForm = new Form<String>("sign-form", new Model<String>())
         {
-            private final String defaultMessage = "put your message here";
             private TextArea<String> contentField;
 
             {
-                contentField = new TextArea<String>("sign-content", new Model<String>(defaultMessage));
+                contentField = new TextArea<String>("sign-content", new Model<String>(""));
                 add(contentField);
             }
 
@@ -102,19 +104,10 @@ public class Guestbook extends WebPage
                 String content = contentField.getModelObject();
                 Date date = new Date();
                 Greeting greeting = new Greeting(user, content, date);
-                pm.get().makePersistent(greeting);
-                messages.setList(listGreetings());
+                Guestbook.this.greetings.persist(greeting);
+                contentField.setModelObject("");
             }
         };
         add(signForm);
-    }
-
-    private List<Greeting> listGreetings()
-    {
-        String query = "select from " + Greeting.class.getName() + " order by date desc range 0,5";
-        List<Greeting> greetings = (List<Greeting>) pm.get().newQuery(query).execute();
-        // This effectively detaches the list from JDO so the Guestbook page can be stored in the session.
-        // TODO: prevent the list from being serialized as part of the page.
-        return new ArrayList<Greeting>(greetings);
     }
 }

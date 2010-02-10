@@ -1,8 +1,13 @@
-package com.example;
+package com.example.web;
 
+import com.example.Greetings;
+import com.example.Repository;
 import com.example.jdo.PersistenceManagerFilter;
+import com.example.model.Message;
+import com.example.service.GreetingRepository;
 import com.example.service.MessageRepository;
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 
 /**
  * This Guice module sets up the bindings used in this Wicket application, including the
@@ -17,6 +22,7 @@ public class GuiceModule extends AbstractModule
         install(new PersistenceManagerFilter.GuiceModule());
 
         // business object bindings go here
-        bind(Messages.class).to(MessageRepository.class);
+        bind(new TypeLiteral<Repository<Message>>() { }).to(MessageRepository.class);
+        bind(Greetings.class).to(GreetingRepository.class);
     }
 }

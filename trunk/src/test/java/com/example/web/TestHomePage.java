@@ -1,12 +1,10 @@
-package com.example;
+package com.example.web;
 
+import com.example.BaseTestCase;
 import com.example.jdo.PersistenceManagerFilter;
 import com.google.inject.servlet.GuiceFilter;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.util.tester.WicketTester;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import javax.servlet.Filter;
@@ -25,6 +23,7 @@ public class TestHomePage extends BaseTestCase
     @Override
     protected Filter[] createServletFilters()
     {
+        // Replicate the order of filters as defined in web.xml.
         return new Filter[] { new GuiceFilter(), new PersistenceManagerFilter() };
     }
 
@@ -48,5 +47,29 @@ public class TestHomePage extends BaseTestCase
         tester.assertRenderedPage(HomePage.class);
         tester.assertLabel("messages:0:message", message1);
         tester.assertLabel("messages:1:message", message2);
+    }
+
+    @Test
+    public void testRenderGuestbookPage()
+    {
+        final String message1 = "Testing 1..2..3";
+        final String message2 = "Foobar";
+
+        setUserEmail("test@example.com");
+        
+        // Request the home page.
+        tester.startPage(Guestbook.class);
+
+        // Assert that the home page was rendered.
+        tester.assertRenderedPage(Guestbook.class);
+
+//        // Assert that the message appears where expected.
+//        tester.assertLabel("messages:0:message", message1);
+//
+//        // Do it one more time.
+//        tester.startPage(HomePage.class, new PageParameters("message=" + message2));
+//        tester.assertRenderedPage(HomePage.class);
+//        tester.assertLabel("messages:0:message", message1);
+//        tester.assertLabel("messages:1:message", message2);
     }
 }
