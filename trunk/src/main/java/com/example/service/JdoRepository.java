@@ -21,6 +21,11 @@ public abstract class JdoRepository<T> implements Repository<T>
         this.pmProvider = pmProvider;
     }
 
+    public T getById(Object key)
+    {
+        return pmProvider.get().getObjectById(clazz, key);
+    }
+
     public List<T> list()
     {
         List<T> entities = new ArrayList<T>();
