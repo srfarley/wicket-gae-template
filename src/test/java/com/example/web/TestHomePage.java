@@ -1,6 +1,6 @@
 package com.example.web;
 
-import com.example.BaseTestCase;
+import com.example.BaseWicketGoogleAppEngineTest;
 import com.example.jdo.PersistenceManagerFilter;
 import com.google.inject.servlet.GuiceFilter;
 import org.apache.wicket.PageParameters;
@@ -12,7 +12,7 @@ import javax.servlet.Filter;
 /**
  * Simple test using the WicketTester
  */
-public class TestHomePage extends BaseTestCase
+public class TestHomePage extends BaseWicketGoogleAppEngineTest
 {
     @Override
     protected WebApplication createWebApplication()
