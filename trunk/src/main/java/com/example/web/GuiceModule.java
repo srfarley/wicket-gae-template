@@ -17,7 +17,7 @@ public class GuiceModule extends AbstractModule
         // Enable per-request-thread PersistenceManager injection.
         install(new PersistenceManagerFilter.GuiceModule());
 
-        // business object bindings go here
+        // Business object bindings go here.
         bind(Greetings.class).to(GreetingRepository.class);
     }
 }

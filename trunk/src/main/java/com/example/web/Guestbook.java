@@ -45,7 +45,7 @@ public class Guestbook extends WebPage
         ExternalLink signIn = new ExternalLink("sign-in", userService.createLoginURL("/" + getRequest().getURL()));
         helloAnon.add(signIn);
 
-        Label noMessages = new Label("no-messages"); // TODO: Make this appear when empty; try a wrapper
+        Label noMessages = new Label("no-messages", "The guestbook has no messages.");
         add(noMessages);
 
         if (user != null)
