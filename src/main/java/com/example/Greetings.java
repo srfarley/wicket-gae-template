@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface Greetings extends Repository<Greeting>
 {
-    List<Greeting> listRecentGreetings();
+    List<Greeting> listLatestGreetings();
 }

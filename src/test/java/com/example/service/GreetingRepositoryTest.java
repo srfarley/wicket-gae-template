@@ -12,7 +12,7 @@ import javax.jdo.PersistenceManager;
 import java.util.Date;
 
 /**
- *
+ * This is a test of the GreetingRepository in isolation, without invoking Wicket.
  */
 public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
 {
@@ -40,19 +40,30 @@ public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
     }
 
     @Test
-    public void testPersistWithLoggedInUser()
+    public void testPersistWithAuthenticatedUser()
     {
         final String userEmail = "foo@example.com";
         final String content = "Hello, World!";
         final Date date = new Date();
         User author = new User(userEmail, "");
         Greeting greeting = new Greeting(author, content, date);
+        
         greetingRepo.persist(greeting);
 
         assertNotNull(greeting.getId());
-        Greeting greetingP = greetingRepo.getById(greeting.getId());
-        assertEquals(greeting.getAuthor(), greetingP.getAuthor());
-        assertEquals(greeting.getContent(), greetingP.getContent());
-        assertEquals(greeting.getDate(), greetingP.getDate());
+        assertNotNull(greetingRepo.getById(greeting.getId()));
+    }
+
+    @Test
+    public void testPersistWithAnonymousUser()
+    {
+        final String content = "Hello, World!";
+        final Date date = new Date();
+        Greeting greeting = new Greeting(null, content, date);
+
+        greetingRepo.persist(greeting);
+
+        assertNotNull(greeting.getId());
+        assertNotNull(greetingRepo.getById(greeting.getId()));
     }
 }

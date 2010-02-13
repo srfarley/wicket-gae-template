@@ -36,7 +36,7 @@ public class Guestbook extends WebPage
         WebMarkupContainer helloAnon = new WebMarkupContainer("hello-anon");
         add(helloAnon);
 
-        Label userNickname = new Label("user-nickname");
+        Label userNickname = new Label("user-email");
         helloUser.add(userNickname);
 
         ExternalLink signOut = new ExternalLink("sign-out", userService.createLogoutURL("/" + getRequest().getURL()));
@@ -50,7 +50,7 @@ public class Guestbook extends WebPage
 
         if (user != null)
         {
-            userNickname.setDefaultModel(new Model<String>(user.getNickname()));
+            userNickname.setDefaultModel(new Model<String>(user.getEmail()));
             helloAnon.setVisible(false);
         }
         else
@@ -66,7 +66,7 @@ public class Guestbook extends WebPage
             @Override
             protected List<Greeting> load()
             {
-                return greetings.listRecentGreetings();
+                return greetings.listLatestGreetings();
             }
         };
 
@@ -81,9 +81,8 @@ public class Guestbook extends WebPage
             protected void populateItem(ListItem<Greeting> item)
             {
                 Greeting greeting = item.getModel().getObject();
-                String nickname = greeting.getAuthor() != null ? greeting.getAuthor().getNickname()
-                        : "An anonymous person ";
-                item.add(new Label("message", nickname + " wrote ")); // TODO: bold style around user nickname
+                String email = greeting.getAuthor() != null ? greeting.getAuthor().getEmail() : "An anonymous person ";
+                item.add(new Label("message", email + " wrote")); // TODO: bold style around user email
                 item.add(new Label("message-content", greeting.getContent()));
             }
         };
