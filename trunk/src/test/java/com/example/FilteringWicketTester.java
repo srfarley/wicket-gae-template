@@ -54,6 +54,30 @@ public class FilteringWicketTester extends WicketTester
         }
     }
 
+    @Override
+    public void submitForm(final String path)
+    {
+        try
+        {
+            // invoke the filter chain and then...
+            doFilter(servletFilters.iterator(), new Runnable()
+            {
+                public void run()
+                {
+                    // ...execute the form submission
+                    FilteringWicketTester.super.submitForm(path);
+                }
+            });
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch (ServletException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void destroy()

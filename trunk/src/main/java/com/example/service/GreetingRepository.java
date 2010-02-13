@@ -4,10 +4,12 @@ import com.example.Greetings;
 import com.example.model.Greeting;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 
 import javax.jdo.PersistenceManager;
 import java.util.List;
 
+@Singleton
 public class GreetingRepository extends JdoRepository<Greeting> implements Greetings
 {
     @Inject
@@ -16,8 +18,8 @@ public class GreetingRepository extends JdoRepository<Greeting> implements Greet
         super(Greeting.class, pmProvider);
     }
 
-    public List<Greeting> listRecentGreetings()
+    public List<Greeting> listLatestGreetings()
     {
-        return list("select from " + Greeting.class.getName() + " order by date desc range 0,5");
+        return listUsingNamedQuery("latestGreetings");
     }
 }

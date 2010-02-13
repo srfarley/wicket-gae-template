@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class JdoRepository<T> implements Repository<T>
 {
     private Class<T> clazz;
-    private Provider<PersistenceManager> pmProvider;
+    protected Provider<PersistenceManager> pmProvider;
 
     protected JdoRepository(Class<T> clazz, Provider<PersistenceManager> pmProvider)
     {
@@ -64,6 +64,22 @@ public abstract class JdoRepository<T> implements Repository<T>
     {
         @SuppressWarnings("unchecked")
         Collection<T> results = (Collection<T>) pmProvider.get().newQuery(query).executeWithMap(parameters);
+        return new ArrayList<T>(results);
+    }
+
+    protected List<T> listUsingNamedQuery(String queryName, Object... parameters)
+    {
+        @SuppressWarnings("unchecked")
+        Collection<T> results =
+                (Collection<T>) pmProvider.get().newNamedQuery(clazz, queryName).executeWithArray(parameters);
+        return new ArrayList<T>(results);
+    }
+
+    protected List<T> listUsingNamedQuery(String queryName, Map parameters)
+    {
+        @SuppressWarnings("unchecked")
+        Collection<T> results =
+                (Collection<T>) pmProvider.get().newNamedQuery(clazz, queryName).executeWithMap(parameters);
         return new ArrayList<T>(results);
     }
 }

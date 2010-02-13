@@ -2,14 +2,13 @@ package com.example.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.*;
+
 import com.google.appengine.api.users.User;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
+@Query(name="latestGreetings",
+       value="select from com.example.model.Greeting order by date desc range 0,5")
 public class Greeting implements Serializable
 {
     @PrimaryKey
@@ -19,10 +18,10 @@ public class Greeting implements Serializable
     @Persistent
     private User author;
 
-    @Persistent
+    @Persistent(nullValue = NullValue.EXCEPTION)
     private String content;
 
-    @Persistent
+    @Persistent(nullValue = NullValue.EXCEPTION)
     private Date date;
 
     public Greeting(User author, String content, Date date) {
