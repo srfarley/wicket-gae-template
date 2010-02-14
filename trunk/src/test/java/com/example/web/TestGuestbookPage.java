@@ -31,9 +31,11 @@ public class TestGuestbookPage extends BaseWicketGoogleAppEngineTest
     {
         final String message1 = "Testing 1..2..3";
         final String message2 = "Foobar";
-        final String userEmail = "test@example.com";
+        final String authorNickname = "test";
+        final String authorEmail = authorNickname + "@example.com";
 
-        appEngineHelper.setEnvEmail(userEmail);
+
+        appEngineHelper.setEnvEmail(authorEmail);
         appEngineHelper.setEnvIsLoggedIn(true);
         
         // Request the page and assert that it was rendered.
@@ -44,16 +46,16 @@ public class TestGuestbookPage extends BaseWicketGoogleAppEngineTest
         tester.setParameterForNextRequest("sign-form:sign-content", message1);
         tester.submitForm("sign-form");
         tester.assertRenderedPage(Guestbook.class);
-        tester.assertLabel("messages:0:message", userEmail + " wrote");
-        tester.assertLabel("messages:0:message-content", message1);
+        tester.assertLabel("messages:0:author", authorNickname);
+        tester.assertLabel("messages:0:message", message1);
 
         // Submit and assert another message.
         tester.setParameterForNextRequest("sign-form:sign-content", message2);
         tester.submitForm("sign-form");
         tester.assertRenderedPage(Guestbook.class);
-        tester.assertLabel("messages:0:message", userEmail + " wrote");
-        tester.assertLabel("messages:0:message-content", message2);
-        tester.assertLabel("messages:1:message", userEmail + " wrote");
-        tester.assertLabel("messages:1:message-content", message1);
+        tester.assertLabel("messages:0:author", authorNickname);
+        tester.assertLabel("messages:0:message", message2);
+        tester.assertLabel("messages:1:author", authorNickname);
+        tester.assertLabel("messages:1:message", message1);
     }
 }

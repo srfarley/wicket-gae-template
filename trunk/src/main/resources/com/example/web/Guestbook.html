@@ -10,7 +10,7 @@
 <body>
 
 <div wicket:id="hello-user">
-    Hello, <span wicket:id="user-email">user email</span>! (You can <a wicket:id="sign-out" href="#">sign out</a>.)
+    Hello, <span wicket:id="user">user</span>! (You can <a wicket:id="sign-out" href="#">sign out</a>.)
 </div>
 
 <div wicket:id="hello-anon">
@@ -20,8 +20,8 @@
 <p wicket:id="no-messages">The guestbook has no messages.</p>
 
 <div wicket:id="messages">
-    <p wicket:id="message">Somebody wrote:</p>
-    <blockquote wicket:id="message-content">some content</blockquote>
+    <p><span style="font-weight: bold" wicket:id="author">somebody@somewhere</span> wrote:</p>
+    <blockquote wicket:id="message">some content</blockquote>
 </div>
 
 <form wicket:id="sign-form">
