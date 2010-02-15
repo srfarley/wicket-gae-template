@@ -4,10 +4,20 @@
       xml:lang="en"
       lang="en">
 <head>
+    <title>Google App Engine Guestbook demo on Wicket</title>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
 </head>
 
 <body>
+
+<p style="font-size: 85%; background-color: white; border-style: solid; border-width: 1px; padding: 10px;">
+    This is the
+    <a href="http://code.google.com/appengine/docs/java/overview.html">Google App Engine</a> Guestbook demo re-implemented using
+    <a href="http://wicket.apache.org">Wicket</a> (along with
+    <a href="http://code.google.com/p/google-guice/">Guice</a> for dependency injection).  Visit the
+    <a href="http://code.google.com/p/wicket-gae-template/">project page</a> for details on how you can get started on
+    your own Wicket/GAE project.
+</p>
 
 <div wicket:id="hello-user">
     Hello, <span wicket:id="user">user</span>! (You can <a wicket:id="sign-out" href="#">sign out</a>.)
