@@ -3,6 +3,7 @@ package com.example.web;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.protocol.http.HttpSessionStore;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 import org.apache.wicket.session.ISessionStore;
 
 /**
@@ -19,6 +20,8 @@ public class SampleApplication extends WebApplication
     protected void init()
     {
         super.init();
+
+        mount(new HybridUrlCodingStrategy("/guestbook", Guestbook.class));
 
         // for Google App Engine
         getResourceSettings().setResourcePollFrequency(null);
