@@ -1,8 +1,6 @@
 package com.example.web;
 
-import com.example.Greetings;
 import com.example.jdo.PersistenceManagerFilter;
-import com.example.service.GreetingRepository;
 import com.google.inject.AbstractModule;
 
 /**
@@ -18,6 +16,5 @@ public class GuiceModule extends AbstractModule
         install(new PersistenceManagerFilter.GuiceModule());
 
         // Business object bindings go here.
-        bind(Greetings.class).to(GreetingRepository.class);
     }
 }

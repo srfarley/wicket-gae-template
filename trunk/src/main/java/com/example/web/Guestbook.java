@@ -1,7 +1,8 @@
 package com.example.web;
 
-import com.example.Greetings;
 import com.example.model.Greeting;
+import com.example.service.GreetingQueries;
+import com.example.service.GreetingRepository;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -23,7 +24,10 @@ import java.util.List;
 public class Guestbook extends WebPage
 {
     @Inject
-    private Greetings greetings;
+    private GreetingRepository greetingRepo;
+
+    @Inject
+    private GreetingQueries greetingQueries;
 
     public Guestbook()
     {
@@ -66,7 +70,7 @@ public class Guestbook extends WebPage
             @Override
             protected List<Greeting> load()
             {
-                return greetings.listLatestGreetings();
+                return greetingQueries.latest(5);
             }
         };
 
@@ -103,7 +107,7 @@ public class Guestbook extends WebPage
                 String content = contentField.getModelObject();
                 Date date = new Date();
                 Greeting greeting = new Greeting(user, content, date);
-                Guestbook.this.greetings.persist(greeting);
+                Guestbook.this.greetingRepo.persist(greeting);
                 contentField.setModelObject("");
             }
         };
