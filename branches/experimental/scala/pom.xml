@@ -2,14 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>wicket-gae-template</artifactId>
+    <artifactId>wicket-gae-scala</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <name>wicket-gae-template</name>
+    <name>wicket-gae-scala</name>
     <description>
-        This project is a template for building Wicket-based web applications that run on
-        Google App Engine, using Google Guice for dependency injection.
+        This project is an experiment to see if we can use Scala to build typesafe JDO queries.
     </description>
 
     <properties>
@@ -23,7 +22,7 @@
           GAE home points to directory where GAE SDK is unpacked in local repository
         -->
         <!--<gae.home>-->
-            <!--${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}-->
+        <!--${settings.localRepository}/com/google/appengine/appengine-java-sdk/${gae.version}/appengine-java-sdk-${gae.version}-->
         <!--</gae.home>-->
 
         <!-- Upload to http://0.latest.<applicationName>.appspot.com by default -->
@@ -183,6 +182,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Scala -->
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -229,6 +236,28 @@
                     <target>1.6</target>
                     <debug>true</debug>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.13.1</version>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.datanucleus</groupId>
@@ -304,6 +333,11 @@
             <name>Maven-GAE Plugin Repository</name>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
         </repository>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -320,6 +354,11 @@
             <id>maven-gae-plugin</id>
             <name>Maven-GAE Plugin Repository</name>
             <url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
         </pluginRepository>
     </pluginRepositories>
 </project>

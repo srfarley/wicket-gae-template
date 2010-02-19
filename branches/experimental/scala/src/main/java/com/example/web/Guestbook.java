@@ -3,6 +3,7 @@ package com.example.web;
 import com.example.model.Greeting;
 import com.example.service.GreetingQueries;
 import com.example.service.GreetingRepository;
+import com.example.service.TypesafeGreetingQueries;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -27,7 +28,7 @@ public class Guestbook extends WebPage
     private GreetingRepository greetingRepo;
 
     @Inject
-    private GreetingQueries greetingQueries;
+    private TypesafeGreetingQueries greetingQueries;
 
     public Guestbook()
     {
