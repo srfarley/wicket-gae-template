@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.BaseGoogleAppEngineTest;
+import com.example.GreetingQueries;
+import com.example.Repository;
 import com.example.model.Greeting;
 import com.google.appengine.api.users.User;
 import com.google.inject.Provider;
@@ -12,12 +14,12 @@ import javax.jdo.PersistenceManager;
 import java.util.*;
 
 /**
- * This is a test of the GreetingRepository in isolation, without invoking Wicket.
+ * This is a test of the JdoGreetingRepository and JdoGreetingQueries classes in isolation, without invoking Wicket.
  */
-public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
+public class JdoGreetingPersistenceTest extends BaseGoogleAppEngineTest
 {
     private PersistenceManager pm;
-    private GreetingRepository greetingRepo;
+    private Repository<Greeting> greetingRepo;
     private GreetingQueries greetingQueries;
 
     @BeforeMethod
@@ -34,14 +36,14 @@ public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
             }
         };
 
-        greetingRepo = new GreetingRepository()
+        greetingRepo = new JdoGreetingRepository()
         {
             {
                 setPersistenceManagerProvider(pmProvider);
             }
         };
 
-        greetingQueries = new GreetingQueries()
+        greetingQueries = new JdoGreetingQueries()
         {
             {
                 setPersistenceManagerProvider(pmProvider);
@@ -67,7 +69,7 @@ public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
         greetingRepo.persist(greeting);
 
         assertNotNull(greeting.getId());
-        assertNotNull(greetingQueries.getById(greeting.getId()));
+        assertNotNull(greetingRepo.get(greeting.getId()));
     }
 
     @Test
@@ -80,7 +82,36 @@ public class GreetingRepositoryTest extends BaseGoogleAppEngineTest
         greetingRepo.persist(greeting);
 
         assertNotNull(greeting.getId());
-        assertNotNull(greetingQueries.getById(greeting.getId()));
+        assertNotNull(greetingRepo.get(greeting.getId()));
+    }
+
+    @Test
+    public void testDelete()
+    {
+        final String content = "Hello, World!";
+        final Date date = new Date();
+        final Greeting greeting = new Greeting(null, content, date);
+
+        greetingRepo.runInTransaction(new Runnable()
+        {
+            public void run()
+            {
+                greetingRepo.persist(greeting);
+            }
+        });
+
+        Long id = greeting.getId();
+        assertNotNull(greetingRepo.get(id));
+
+        greetingRepo.runInTransaction(new Runnable()
+        {
+            public void run()
+            {
+                greetingRepo.delete(greeting);
+            }
+        });
+
+        assertNull(greetingRepo.get(id));
     }
 
     @Test

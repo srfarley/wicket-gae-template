@@ -1,8 +1,8 @@
 package com.example.web;
 
+import com.example.GreetingQueries;
+import com.example.Repository;
 import com.example.model.Greeting;
-import com.example.service.GreetingQueries;
-import com.example.service.GreetingRepository;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -24,7 +24,7 @@ import java.util.List;
 public class Guestbook extends WebPage
 {
     @Inject
-    private GreetingRepository greetingRepo;
+    private Repository<Greeting> greetingRepo;
 
     @Inject
     private GreetingQueries greetingQueries;

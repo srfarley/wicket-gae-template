@@ -1,11 +1,18 @@
 package com.example.jdo;
 
+import com.example.Repository;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
 
-public abstract class JdoRepository<T>
+/**
+ * This base class implements the full Repository interface for managing persistent JDO entities.
+ *
+ * @param <T> the persistent entity type
+ */
+public abstract class JdoRepository<T> implements Repository<T>
 {
     private Class<T> clazz;
     private Provider<PersistenceManager> pmProvider;
@@ -27,18 +34,41 @@ public abstract class JdoRepository<T>
         this.pmProvider = pmProvider;
     }
 
+    public T get(Object key)
+    {
+        PersistenceManager pm = pmProvider.get();
+        try
+        {
+            return pm.getObjectById(clazz, key);
+        }
+        catch (RuntimeException e)
+        {
+            return null;
+        }
+    }
+
     public void persist(T entity)
     {
         pmProvider.get().makePersistent(entity);
     }
 
-    public void delete(Long id)
-    {
-        delete(pmProvider.get().getObjectById(clazz, id));
-    }
-
     public void delete(T entity)
     {
         pmProvider.get().deletePersistent(entity);
+    }
+
+    public void runInTransaction(Runnable block)
+    {
+        Transaction tx = pmProvider.get().currentTransaction();
+        try
+        {
+            tx.begin();
+            block.run();
+            tx.commit();
+        }
+        catch (RuntimeException e)
+        {
+            tx.rollback();
+        }
     }
 }
