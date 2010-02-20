@@ -7,13 +7,12 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * This base class supplies convenient methods for subclasses to implement JDO queries.
+ * @param <T> the persistent entity type
  */
-@SuppressWarnings("unchecked")
 public abstract class JdoQueries<T>
 {
     private Class<T> clazz;
@@ -41,6 +40,7 @@ public abstract class JdoQueries<T>
         return pmProvider.get().newQuery(clazz);
     }
 
+    @SuppressWarnings("unchecked")
     protected Collection<T> toCollection(Object queryResult)
     {
         return (Collection<T>) queryResult;
@@ -49,15 +49,5 @@ public abstract class JdoQueries<T>
     protected List<T> toList(Object queryResult)
     {
         return new ArrayList<T>(toCollection(queryResult));
-    }
-
-    public T getById(Object key)
-    {
-        return pmProvider.get().getObjectById(clazz, key);
-    }
-
-    public Iterator<T> getAll(boolean subclasses)
-    {
-        return pmProvider.get().getExtent(clazz, subclasses).iterator();
     }
 }

@@ -5,9 +5,9 @@ import com.example.model.Greeting;
 import com.google.inject.Singleton;
 
 @Singleton
-public class GreetingRepository extends JdoRepository<Greeting>
+public class JdoGreetingRepository extends JdoRepository<Greeting>
 {
-    public GreetingRepository()
+    public JdoGreetingRepository()
     {
         super(Greeting.class);
     }
