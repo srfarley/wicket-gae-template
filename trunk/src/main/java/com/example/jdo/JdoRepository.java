@@ -66,9 +66,12 @@ public abstract class JdoRepository<T> implements Repository<T>
             block.run();
             tx.commit();
         }
-        catch (RuntimeException e)
+        finally
         {
-            tx.rollback();
+            if (tx.isActive())
+            {
+                tx.rollback();
+            }
         }
     }
 }
