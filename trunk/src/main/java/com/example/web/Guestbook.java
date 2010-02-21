@@ -109,6 +109,10 @@ public class Guestbook extends WebPage
                 Greeting greeting = new Greeting(user, content, date);
                 Guestbook.this.greetingRepo.persist(greeting);
                 contentField.setModelObject("");
+
+                // This causes a redirect to a clean page and URL, rather than rendering to the state of the
+                // current page which we don't care about here.
+                setResponsePage(Guestbook.class);
             }
         };
         add(signForm);
