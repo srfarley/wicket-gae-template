@@ -3,8 +3,6 @@ package com.example.web;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.protocol.http.HttpSessionStore;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 import org.apache.wicket.session.ISessionStore;
 
 /**
