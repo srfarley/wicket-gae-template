@@ -1,7 +1,6 @@
 package com.example.jdo;
 
 import com.example.Repository;
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import javax.jdo.PersistenceManager;
@@ -14,23 +13,12 @@ import javax.jdo.Transaction;
  */
 public abstract class JdoRepository<T> implements Repository<T>
 {
-    private Class<T> clazz;
-    private Provider<PersistenceManager> pmProvider;
-
-    protected JdoRepository(Class<T> clazz)
-    {
-        this.clazz = clazz;
-    }
+    private final Class<T> clazz;
+    private final Provider<PersistenceManager> pmProvider;
 
     protected JdoRepository(Class<T> clazz, Provider<PersistenceManager> pmProvider)
     {
-        this(clazz);
-        setPersistenceManagerProvider(pmProvider);
-    }
-
-    @Inject
-    protected void setPersistenceManagerProvider(Provider<PersistenceManager> pmProvider)
-    {
+        this.clazz = clazz;
         this.pmProvider = pmProvider;
     }
 

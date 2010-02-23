@@ -8,15 +8,19 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.servlet.*;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class PersistenceManagerFilter implements Filter
 {
-    private PersistenceManagerFactory pmf;
+    private static final Logger logger = Logger.getLogger(PersistenceManagerFilter.class.getName());
 
-    private static ThreadLocal<PersistenceManager> pm = new ThreadLocal<PersistenceManager>();
+    private static final ThreadLocal<PersistenceManager> pm = new ThreadLocal<PersistenceManager>();
+
+    private PersistenceManagerFactory pmf;
 
     public void init(FilterConfig filterConfig) throws ServletException
     {
+        logger.info("Creating PersistenceManagerFactory");
         pmf = JDOHelper.getPersistenceManagerFactory("transactions-optional");
     }
 
@@ -36,6 +40,7 @@ public class PersistenceManagerFilter implements Filter
 
     public void destroy()
     {
+        logger.info("Closing PersistenceManagerFactory");
         pmf.close();
     }
 
