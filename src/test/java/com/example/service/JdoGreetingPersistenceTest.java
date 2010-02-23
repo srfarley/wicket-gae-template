@@ -36,19 +36,8 @@ public class JdoGreetingPersistenceTest extends BaseGoogleAppEngineTest
             }
         };
 
-        greetingRepo = new JdoGreetingRepository()
-        {
-            {
-                setPersistenceManagerProvider(pmProvider);
-            }
-        };
-
-        greetingQueries = new JdoGreetingQueries()
-        {
-            {
-                setPersistenceManagerProvider(pmProvider);
-            }
-        };
+        greetingRepo = new JdoGreetingRepository(pmProvider);
+        greetingQueries = new JdoGreetingQueries(pmProvider);
     }
 
     @AfterMethod

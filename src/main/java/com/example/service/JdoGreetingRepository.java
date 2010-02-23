@@ -2,13 +2,16 @@ package com.example.service;
 
 import com.example.jdo.JdoRepository;
 import com.example.model.Greeting;
-import com.google.inject.Singleton;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-@Singleton
+import javax.jdo.PersistenceManager;
+
 public class JdoGreetingRepository extends JdoRepository<Greeting>
 {
-    public JdoGreetingRepository()
+    @Inject
+    public JdoGreetingRepository(Provider<PersistenceManager> pmProvider)
     {
-        super(Greeting.class);
+        super(Greeting.class, pmProvider);
     }
 }
