@@ -1,8 +1,8 @@
 package com.example.web;
 
+import com.example.GreetingQueries;
+import com.example.Repository;
 import com.example.model.Greeting;
-import com.example.service.GreetingQueries;
-import com.example.service.GreetingRepository;
 import com.example.service.TypesafeGreetingQueries;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -25,10 +25,10 @@ import java.util.List;
 public class Guestbook extends WebPage
 {
     @Inject
-    private GreetingRepository greetingRepo;
+    private Repository<Greeting> greetingRepo;
 
     @Inject
-    private TypesafeGreetingQueries greetingQueries;
+    private GreetingQueries greetingQueries;
 
     public Guestbook()
     {
@@ -110,6 +110,10 @@ public class Guestbook extends WebPage
                 Greeting greeting = new Greeting(user, content, date);
                 Guestbook.this.greetingRepo.persist(greeting);
                 contentField.setModelObject("");
+
+                // This causes a redirect to a clean page and URL, rather than rendering to the state of the
+                // current page which we don't care about here.
+                setResponsePage(Guestbook.class);
             }
         };
         add(signForm);

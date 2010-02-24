@@ -1,9 +1,14 @@
 package com.example.service
 
-import com.example.model.Greeting
 import java.util.List
+import javax.jdo.PersistenceManager
+import com.example.model.Greeting
+import com.google.inject.{Inject, Provider}
 
-class TypesafeGreetingQueries extends GreetingQueries
+
+class TypesafeGreetingQueries @Inject()(pmProvider: Provider[PersistenceManager]) extends JdoGreetingQueries(pmProvider)
 {
-    override def latest(max: Int) : List[Greeting] = super.latest(max)
+    override def latest(max: Int): List[Greeting] = super.latest(max)
 }
+
+
