@@ -3,6 +3,7 @@ package com.example.jdo;
 import com.example.Repository;
 import com.google.inject.Provider;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
 
@@ -29,7 +30,7 @@ public abstract class JdoRepository<T> implements Repository<T>
         {
             return pm.getObjectById(clazz, key);
         }
-        catch (RuntimeException e)
+        catch (JDOObjectNotFoundException e)
         {
             return null;
         }
