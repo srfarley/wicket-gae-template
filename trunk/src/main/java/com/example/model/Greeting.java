@@ -45,16 +45,4 @@ public class Greeting implements Serializable
     public Date getDate() {
         return date;
     }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }
