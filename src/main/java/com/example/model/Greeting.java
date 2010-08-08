@@ -7,8 +7,8 @@ import javax.jdo.annotations.*;
 import com.google.appengine.api.users.User;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-@Query(name="latestGreetings",
-       value="select from com.example.model.Greeting order by date desc range 0,5")
+@Query(name = "latestGreetings",
+       value = "select from com.example.model.Greeting order by date desc range 0,5")
 public class Greeting implements Serializable
 {
     @PrimaryKey
@@ -24,25 +24,30 @@ public class Greeting implements Serializable
     @Persistent(nullValue = NullValue.EXCEPTION)
     private Date date;
 
-    public Greeting(User author, String content, Date date) {
+    public Greeting(User author, String content, Date date)
+    {
         this.author = author;
         this.content = content;
         this.date = date;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public User getAuthor() {
+    public User getAuthor()
+    {
         return author;
     }
 
-    public String getContent() {
+    public String getContent()
+    {
         return content;
     }
 
-    public Date getDate() {
+    public Date getDate()
+    {
         return date;
     }
 }
