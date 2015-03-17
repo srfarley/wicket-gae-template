@@ -96,7 +96,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.appengine</groupId>
+            <groupId>com.google.appengine.orm</groupId>
             <artifactId>datanucleus-appengine</artifactId>
             <version>1.0.5</version>
         </dependency>
@@ -270,6 +270,11 @@
                 <groupId>net.kindleit</groupId>
                 <artifactId>maven-gae-plugin</artifactId>
                 <version>0.5.6</version>
+                <configuration>
+                    <jvmFlags>
+                        <jvmFlag>-Dappengine.user.timezone=UTC</jvmFlag>
+                    </jvmFlags>
+                </configuration>
             </plugin>
         </plugins>
     </build>
